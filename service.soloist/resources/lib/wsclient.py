@@ -143,6 +143,9 @@ class WebSocket:
                 if fin:
                     return b"".join(parts).decode()
 
+    def settimeout(self, timeout):
+        self._sock.settimeout(timeout)
+
     def close(self):
         try:
             self._send(OP_CLOSE, struct.pack("!H", 1000))

@@ -5,6 +5,9 @@
     <import addon="service.system.docker" version="12.0.0"/>
   </requires>
   <extension point="xbmc.service" library="default.py"/>
+  <extension point="xbmc.python.script" library="menu.py">
+    <provides>executable</provides>
+  </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">Spotify Connect for Kodi via Spotify Soloist</summary>
     <summary lang="de_DE">Spotify Connect für Kodi über Spotify Soloist</summary>

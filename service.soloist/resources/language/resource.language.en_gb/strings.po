@@ -58,3 +58,39 @@ msgstr ""
 msgctxt "#30204"
 msgid "Start failed, see kodi.log"
 msgstr ""
+
+msgctxt "#30300"
+msgid "Soloist is not running"
+msgstr ""
+
+msgctxt "#30301"
+msgid "Ready – no Spotify account connected yet"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Ready – not selected in the Spotify app"
+msgstr ""
+
+msgctxt "#30303"
+msgid "Playing: {}"
+msgstr ""
+
+msgctxt "#30304"
+msgid "Paused: {}"
+msgstr ""
+
+msgctxt "#30305"
+msgid "Connected to Spotify"
+msgstr ""
+
+msgctxt "#30310"
+msgid "Release Spotify device"
+msgstr ""
+
+msgctxt "#30311"
+msgid "Settings"
+msgstr ""
+
+msgctxt "#30312"
+msgid "Spotify device released"
+msgstr ""

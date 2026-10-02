@@ -53,6 +53,9 @@ Spotify-App unter „Geräte“ als **Kodi**.
   Titel, Interpret und Cover.
 - **Pause, Weiter und Stopp in Kodi** werden an Spotify weitergegeben.
 - **Startet Kodi etwas anderes**, etwa ein Video, pausiert Spotify.
+- **In Kodi** steht Soloist bei den Programm-Addons. Ein Klick zeigt den
+  Status („Spielt: …“, „Bereit …“) und bietet *Spotify-Gerät freigeben* und
+  *Einstellungen*. Der Dienst selbst liegt unter *Meine Add-ons → Dienste*.
 - **Lautstärke:** Standardmäßig bleibt Soloist fest auf 100 %. Verschiebt
   jemand den Regler in der App, springt er zurück, und die Lautstärke regelt
   nur der Receiver. Das lässt sich in den Einstellungen abschalten.
