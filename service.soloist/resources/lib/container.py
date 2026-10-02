@@ -66,6 +66,17 @@ def ensure_image():
     utils.log(result.stdout)
     if result.returncode != 0:
         raise RuntimeError("docker build failed")
+    _remove_old_images()
+
+
+def _remove_old_images():
+    """Drop images of earlier add-on versions (~100 MB each on the SD card)."""
+    repository = IMAGE.split(":")[0]
+    listing = _docker("image", "ls", "--format", "{{.Repository}}:{{.Tag}}", repository)
+    for image in listing.stdout.split():
+        if image != IMAGE:
+            utils.log(f"removing old image {image}")
+            _docker("image", "rm", image)
 
 
 class Container:
