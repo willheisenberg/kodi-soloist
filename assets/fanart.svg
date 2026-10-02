@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <defs>
+    <radialGradient id="bg" cx="0.5" cy="0.42" r="0.75">
+      <stop offset="0" stop-color="#1D2E55"/><stop offset="0.55" stop-color="#121833"/><stop offset="1" stop-color="#080A16"/>
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <!-- speaker -->
+  <rect x="452" y="120" width="236" height="322" rx="34" fill="none" stroke="#2EC5FF" stroke-width="20"/>
+  <circle cx="570" cy="338" r="66" fill="none" stroke="#2EC5FF" stroke-width="18"/>
+  <circle cx="570" cy="338" r="20" fill="#F2F0F6"/>
+  <circle cx="570" cy="196" r="26" fill="#F2F0F6"/>
+  <!-- connect waves -->
+  <g fill="none" stroke-linecap="round" stroke-width="20">
+    <path d="M738 228a78 78 0 0 1 0 110" stroke="#9B5BFF"/>
+    <path d="M780 182a142 142 0 0 1 0 202" stroke="#6E7BFF"/>
+    <path d="M822 136a206 206 0 0 1 0 294" stroke="#2EC5FF"/>
+  </g>
+  <!-- equalizer -->
+  <g stroke-linecap="round" stroke-width="26">
+    <path d="M300 596v-46" stroke="#2EC5FF"/>
+    <path d="M366 596v-104" stroke="#6E7BFF"/>
+    <path d="M432 596v-70" stroke="#9B5BFF"/>
+    <path d="M498 596v-130" stroke="#2EC5FF"/>
+    <path d="M564 596v-56" stroke="#6E7BFF"/>
+    <path d="M630 596v-96" stroke="#9B5BFF"/>
+    <path d="M696 596v-124" stroke="#2EC5FF"/>
+    <path d="M762 596v-60" stroke="#6E7BFF"/>
+    <path d="M828 596v-104" stroke="#9B5BFF"/>
+    <path d="M894 596v-48" stroke="#2EC5FF"/>
+    <path d="M960 596v-84" stroke="#6E7BFF"/>
+  </g>
+</svg>
