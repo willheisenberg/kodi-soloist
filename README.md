@@ -1,4 +1,4 @@
-![Soloist für Kodi – Fanart](service.soloist/resources/fanart.jpg)
+![Soloist für Kodi](assets/banner.png)
 
 # Soloist für Kodi
 
@@ -133,7 +133,7 @@ ruff check .
 ```
 
 Kodi auf LibreELEC 12 bringt Python 3.11 mit, der Code muss dazu kompatibel
-bleiben. Icon und Fanart entstehen aus den SVG-Dateien in `assets/`.
+bleiben. Icon, Fanart und Banner entstehen aus den SVG-Dateien in `assets/`.
 
 ## Lizenz
 
