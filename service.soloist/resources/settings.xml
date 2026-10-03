@@ -10,12 +10,12 @@
 						<heading>30001</heading>
 					</control>
 				</setting>
-				<setting id="spotify_volume" type="boolean" label="30005" help="">
+				<setting id="pin_volume" type="boolean" label="30005" help="">
 					<level>0</level>
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
-				<setting id="initial_volume" type="integer" label="30002" help="" parent="spotify_volume">
+				<setting id="initial_volume" type="integer" label="30002" help="" parent="pin_volume">
 					<level>0</level>
 					<default>80</default>
 					<constraints>
@@ -25,7 +25,7 @@
 					</constraints>
 					<dependencies>
 						<dependency type="visible">
-							<condition operator="is" setting="spotify_volume">true</condition>
+							<condition operator="is" setting="pin_volume">false</condition>
 						</dependency>
 					</dependencies>
 					<control type="slider" format="percentage"/>

@@ -37,8 +37,8 @@ def _docker(*args, **kwargs):
 
 
 def initial_volume():
-    # Volume stays with the AV receiver unless the app may control it.
-    return utils.get_setting("initial_volume") if utils.get_bool("spotify_volume") else "100"
+    # Pinned volume leaves the AV receiver as the only volume control.
+    return "100" if utils.get_bool("pin_volume") else utils.get_setting("initial_volume")
 
 
 def read_api_key():

@@ -24,7 +24,7 @@ msgid "Don't interrupt other Kodi playback"
 msgstr ""
 
 msgctxt "#30005"
-msgid "Allow volume control from the Spotify app"
+msgid "Always keep volume at 100%"
 msgstr ""
 
 msgctxt "#30010"

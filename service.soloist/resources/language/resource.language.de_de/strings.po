@@ -24,8 +24,8 @@ msgid "Don't interrupt other Kodi playback"
 msgstr "Laufende Kodi-Wiedergabe nicht unterbrechen"
 
 msgctxt "#30005"
-msgid "Allow volume control from the Spotify app"
-msgstr "Lautstärke über die Spotify-App erlauben"
+msgid "Always keep volume at 100%"
+msgstr "Lautstärke immer auf 100 % halten"
 
 msgctxt "#30010"
 msgid "Advanced"

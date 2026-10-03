@@ -56,17 +56,18 @@ Spotify-App unter „Geräte“ als **Kodi**.
 - **In Kodi** steht Soloist bei den Programm-Addons. Ein Klick zeigt den
   Status („Spielt: …“, „Bereit …“) und bietet *Spotify-Gerät freigeben* und
   *Einstellungen*. Der Dienst selbst liegt unter *Meine Add-ons → Dienste*.
-- **Lautstärke:** Standardmäßig bleibt Soloist fest auf 100 %. Verschiebt
-  jemand den Regler in der App, springt er zurück, und die Lautstärke regelt
-  nur der Receiver. Das lässt sich in den Einstellungen abschalten.
+- **Lautstärke:** Standardmäßig regelt die Spotify-App die Lautstärke. Wer nur
+  am Receiver regeln will, schaltet in den Einstellungen *Lautstärke immer auf
+  100 % halten* ein. Verschiebt dann jemand den Regler in der App, springt er
+  zurück.
 
 ## Einstellungen
 
 | Einstellung | Standard | |
 |---|---|---|
 | Gerätename | `Kodi` | Name in der Spotify-App |
-| Lautstärke über die Spotify-App erlauben | aus | Aus: Soloist bleibt auf 100 %, geregelt wird am Receiver |
-| Anfangslautstärke | 80 % | nur sichtbar, wenn die App-Lautstärke erlaubt ist |
+| Lautstärke immer auf 100 % halten | aus | An: Soloist bleibt auf 100 %, geregelt wird nur am Receiver |
+| Anfangslautstärke | 80 % | nur sichtbar, wenn die Lautstärke nicht auf 100 % gehalten wird |
 | Laufende Kodi-Wiedergabe nicht unterbrechen | aus | An: Spotify pausiert, solange Kodi etwas anderes abspielt |
 | Cache-Größe | 500 MB | *Erweitert* |
 | WebSocket-Port / RTP-Port | 24879 / 23433 | *Erweitert*, nur localhost. Den RTP-Port nicht ändern, wenn der PartyQueue-Bot mitläuft. |

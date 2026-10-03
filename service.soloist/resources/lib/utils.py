@@ -14,7 +14,7 @@ _DEFAULTS = {
     "initial_volume": "80",
     "cache_mb": "500",
     "dnd_kodi": "false",
-    "spotify_volume": "false",
+    "pin_volume": "false",
     "ws_port": "24879",
     "rtp_port": "23433",
 }

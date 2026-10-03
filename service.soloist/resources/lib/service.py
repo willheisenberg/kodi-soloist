@@ -91,12 +91,12 @@ class Session:
             self._closed.wait(1)
 
     def _pin_volume(self, volume):
-        """Undo volume changes from the app unless they are allowed.
+        """Undo volume changes from the app if the volume is pinned.
 
         Soloist scales the audio itself; Kodi's own volume stays untouched.
-        With the setting off, the receiver is the only volume control.
+        With the setting on, the receiver is the only volume control.
         """
-        if volume is None or volume == 100 or utils.get_bool("spotify_volume"):
+        if volume is None or volume == 100 or not utils.get_bool("pin_volume"):
             return
         utils.log(f"app set volume {volume}, pinning it to 100")
         self.send("set_volume", volume=100)
