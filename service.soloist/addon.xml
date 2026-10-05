@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="service.soloist" name="Soloist" version="0.2.0" provider-name="willheisenberg">
+<addon id="service.soloist" name="Soloist" version="0.2.1" provider-name="willheisenberg">
   <requires>
     <import addon="xbmc.python" version="3.0.1"/>
     <import addon="service.system.docker" version="12.0.0"/>
