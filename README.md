@@ -1,142 +1,156 @@
-![Soloist für Kodi](assets/banner.png)
+![Soloist for Kodi](assets/banner.png)
 
-# Soloist für Kodi
+# Soloist for Kodi
 
-**Spotify Connect für Kodi auf LibreELEC: Die Box erscheint in der Spotify-App
-als Gerät, und die Musik läuft über Kodi, mit Titel und Cover auf dem
-Fernseher.**
+**English** · [Deutsch](README.de.md)
 
-Grundlage ist [Spotify Soloist](https://developer.spotify.com/documentation/soloist),
-der offizielle Headless-Client von Spotify. librespot-basierte Lösungen
-scheitern bei neu angelegten Spotify-Accounts oft am „Audio key error“.
-Soloist als offizieller Client sollte davon nicht betroffen sein.
+**Spotify Connect for Kodi on LibreELEC: the box shows up as a device in the
+Spotify app, and the music plays through Kodi, with title and cover art on the
+TV.**
 
-> Dieses Addon ist ein inoffizielles Projekt und steht in keiner Verbindung zu
-> Spotify. Soloist selbst ist proprietäre Software von Spotify und wird zur
-> Laufzeit direkt von Spotify heruntergeladen. Es ist nicht Teil dieses Repos.
+It is built on [Spotify Soloist](https://developer.spotify.com/documentation/soloist),
+Spotify's official headless client. librespot-based solutions often fail with
+an "Audio key error" on newly created Spotify accounts. Soloist, being the
+official client, should not be affected by that.
+
+> This add-on is an unofficial project and is not affiliated with Spotify.
+> Soloist itself is proprietary software by Spotify and is downloaded directly
+> from Spotify at runtime. It is not part of this repository.
 
 ---
 
-## Voraussetzungen
+## Requirements
 
 | | |
 |---|---|
-| Gerät | Raspberry Pi 5 (aarch64), getestet. aarch64, armv7 und x86_64 sollten laufen. |
-| System | LibreELEC 12 mit Kodi 21 „Omega“ |
-| Addon | **Docker** (`service.system.docker`) aus dem LibreELEC-Repository |
-| Spotify | ein **Soloist-API-Key**, erzeugt mit einem Premium-Account. Verbinden können sich danach laut Spotify auch Free-Accounts. |
+| Device | Raspberry Pi 5 (aarch64), tested. aarch64, armv7 and x86_64 should work. |
+| System | LibreELEC 12 with Kodi 21 "Omega" |
+| Add-on | **Docker** (`service.system.docker`) from the LibreELEC repository |
+| Spotify | a **Soloist API key**, created with a Premium account. According to Spotify, Free accounts can connect afterwards as well. |
 
 ## Installation
 
-1. **API-Key erzeugen:** mit dem Premium-Account unter
-   <https://developer.spotify.com/dashboard/soloist> einloggen und einen Key anlegen.
-2. **Key auf der Box ablegen**, ohne dass er im Shell-Verlauf landet:
+1. **Create an API key:** log in at
+   <https://developer.spotify.com/dashboard/soloist> with the Premium account
+   and create a key.
+2. **Store the key on the box** without it ending up in the shell history:
    ```
    mkdir -p /storage/.config/soloist && chmod 700 /storage/.config/soloist
    read -rs KEY && printf '%s' "$KEY" > /storage/.config/soloist/api_key && unset KEY
    chmod 600 /storage/.config/soloist/api_key
    ```
-   Nach `read` den Key einfügen und Enter drücken. Dabei wird nichts angezeigt.
-3. Das aktuelle `service.soloist-*.zip` aus den
-   [Releases](https://github.com/willheisenberg/kodi-soloist/releases)
-   herunterladen, oder selbst bauen mit `./scripts/build-zip.sh`.
-4. In Kodi einmalig **Einstellungen → System → Add-ons → Unbekannte Quellen**
-   erlauben, dann **Add-ons → Aus ZIP-Datei installieren**.
+   After `read`, paste the key and press Enter. Nothing is shown while you do.
+3. **Install the repository:** download
+   [`repository.soloist-1.0.0.zip`](https://github.com/willheisenberg/kodi-soloist/raw/main/repo/repository.soloist/repository.soloist-1.0.0.zip)
+   and copy it to the box. In Kodi, allow
+   **Settings → System → Add-ons → Unknown sources** once, then use
+   **Add-ons → Install from zip file**.
+4. **Install the add-on:** **Add-ons → Install from repository → Soloist
+   Repository → Services → Soloist**. Updates then arrive automatically.
 
-Beim ersten Start baut das Addon das Container-Image `kodi-soloist:<version>`.
-Auf einem Pi 5 dauert das etwa eine Minute. Danach erscheint die Box in der
-Spotify-App unter „Geräte“ als **Kodi**.
+It also works without the repository: install the latest
+`service.soloist-*.zip` from the
+[releases](https://github.com/willheisenberg/kodi-soloist/releases) as a zip
+file. Updates then have to be installed by hand.
 
-## Bedienung
+On first start the add-on builds the container image `kodi-soloist:<version>`.
+On a Pi 5 this takes about a minute. After that the box appears in the Spotify
+app under "Devices" as **Kodi**.
 
-- **In der Spotify-App** die Box als Gerät wählen und abspielen. Kodi zeigt
-  Titel, Interpret und Cover.
-- **Pause, Weiter und Stopp in Kodi** werden an Spotify weitergegeben.
-- **Startet Kodi etwas anderes**, etwa ein Video, pausiert Spotify.
-- **In Kodi** steht Soloist bei den Programm-Addons. Ein Klick zeigt den
-  Status („Spielt: …“, „Bereit …“) und bietet *Spotify-Gerät freigeben* und
-  *Einstellungen*. Der Dienst selbst liegt unter *Meine Add-ons → Dienste*.
-- **Lautstärke:** Standardmäßig regelt die Spotify-App die Lautstärke. Wer nur
-  am Receiver regeln will, schaltet in den Einstellungen *Lautstärke immer auf
-  100 % halten* ein. Verschiebt dann jemand den Regler in der App, springt er
-  zurück.
+## Usage
 
-## Einstellungen
+- **In the Spotify app**, pick the box as the device and play. Kodi shows
+  title, artist and cover art.
+- **Pause, next and stop in Kodi** are passed on to Spotify.
+- **If Kodi starts something else**, such as a video, Spotify pauses.
+- **In Kodi**, Soloist is listed under the program add-ons. A click shows the
+  status ("Playing: …", "Ready …") and offers *Release Spotify device* and
+  *Settings*. The service itself is under *My add-ons → Services*.
+- **Volume:** by default the Spotify app controls the volume. If you only want
+  to use the receiver, turn on *Always keep volume at 100%* in the settings.
+  If someone then moves the slider in the app, it jumps back.
 
-| Einstellung | Standard | |
+## Settings
+
+| Setting | Default | |
 |---|---|---|
-| Gerätename | `Kodi` | Name in der Spotify-App |
-| Lautstärke immer auf 100 % halten | aus | An: Soloist bleibt auf 100 %, geregelt wird nur am Receiver |
-| Anfangslautstärke | 80 % | nur sichtbar, wenn die Lautstärke nicht auf 100 % gehalten wird |
-| Laufende Kodi-Wiedergabe nicht unterbrechen | aus | An: Spotify pausiert, solange Kodi etwas anderes abspielt |
-| Cache-Größe | 500 MB | *Erweitert* |
-| WebSocket-Port / RTP-Port | 24879 / 23433 | *Erweitert*, nur localhost. Den RTP-Port nicht ändern, wenn der PartyQueue-Bot mitläuft. |
+| Device name in the Spotify app | `Kodi` | Name shown in the Spotify app |
+| Always keep volume at 100% | off | On: Soloist stays at 100%, only the receiver controls the volume |
+| Initial volume | 80% | only visible while the volume is not kept at 100% |
+| Don't interrupt other Kodi playback | off | On: Spotify pauses as long as Kodi plays something else |
+| Cache size | 500 MB | *Advanced* |
+| WebSocket port / RTP port | 24879 / 23433 | *Advanced*, localhost only. Do not change the RTP port if the PartyQueue bot is running. |
 
-## Zusammenspiel mit dem PartyQueue-Bot
+## Working together with the PartyQueue bot
 
-Mit dem [KodiMediaBot](https://github.com/willheisenberg/KodiMediaBot) können
-sich Bot und Spotify gegenseitig unterbrechen, ohne dass etwas verloren geht:
+With [KodiMediaBot](https://github.com/willheisenberg/KodiMediaBot), the bot
+and Spotify can interrupt each other without anything getting lost:
 
-- **Spotify übernimmt:** Der Bot parkt seine Warteschlange bzw. merkt sich den
-  laufenden Radiosender. Das Panel zeigt `Spotify: Titel – Interpret`.
-- **Spotify ist weg oder bleibt 30 Sekunden pausiert:** Der Bot setzt das
-  unterbrochene Video an der alten Stelle fort bzw. startet den Sender neu.
-- **Stopp im Bot, oder der Bot spielt selbst etwas ab:** Die Box gibt das
-  Spotify-Gerät frei, und die App legt die Wiedergabe zurück aufs Handy.
-  Solange ein anderes Gerät spielt, lässt das Addon Kodi in Ruhe.
+- **Spotify takes over:** the bot parks its queue or remembers the radio
+  station that is playing. The panel shows `Spotify: title – artist`.
+- **Spotify is gone or stays paused for 30 seconds:** the bot resumes the
+  interrupted video at the old position or restarts the station.
+- **Stop in the bot, or the bot plays something itself:** the box releases the
+  Spotify device, and the app moves playback back to the phone. As long as
+  another device is playing, the add-on leaves Kodi alone.
 
-Dafür schicken sich Addon und Bot Kodi-Benachrichtigungen:
+For this, the add-on and the bot send each other Kodi notifications:
 
-| Richtung | Meldung | Bedeutung |
+| Direction | Message | Meaning |
 |---|---|---|
-| Addon → Clients | `Other.soloist_takeover` (sender `service.soloist`) | Spotify startet gleich, und zwar *bevor* Kodi den vorherigen Titel als gestoppt meldet |
-| Client → Addon | `JSONRPC.NotifyAll` mit `message: "soloist_release"` | Spotify-Gerät freigeben (`deactivate`); den Spotify-Stream in Kodi stoppt oder ersetzt der Client selbst |
+| Add-on → clients | `Other.soloist_takeover` (sender `service.soloist`) | Spotify is about to start, sent *before* Kodi reports the previous item as stopped |
+| Client → add-on | `JSONRPC.NotifyAll` with `message: "soloist_release"` | Release the Spotify device (`deactivate`); the client stops or replaces the Spotify stream in Kodi itself |
 
-## Aufbau
+## Architecture
 
 ```
-Spotify-App ──Connect──▶ Soloist (Docker-Container, isoliert)
-                            │ PulseAudio (Senke "soloist")
+Spotify app ──Connect──▶ Soloist (Docker container, isolated)
+                            │ PulseAudio (sink "soloist")
                             ▼
-                   module-rtp-send ──▶ rtp://127.0.0.1:23433 ──▶ Kodi-Player
+                   module-rtp-send ──▶ rtp://127.0.0.1:23433 ──▶ Kodi player
                             ▲
-   Kodi-Addon ◀──WebSocket 127.0.0.1:24879── Titel, Cover, Status
+   Kodi add-on ◀──WebSocket 127.0.0.1:24879── title, cover, status
 ```
 
-- **Soloist ist closed source** und läuft deshalb in einem Container: als
-  normaler Benutzer (uid 1000), mit schreibgeschütztem Dateisystem, ohne
-  Capabilities und mit `no-new-privileges`. Er bekommt nur den
-  PulseAudio-Socket, ein eigenes Volume `soloist-data` und das Host-Netzwerk,
-  das Spotify Connect zum Auffinden im WLAN braucht. An `/storage`, Tokens
-  anderer Dienste und Docker kommt er nicht heran.
-- **Das Binary ist nicht im Addon enthalten**, weil Spotify die Weitergabe
-  verbietet. Der Container lädt es bei jedem Start von Spotifys CDN. Builds
-  laufen nach 90 Tagen ab (Exit-Code 10), dann genügt ein Neustart.
-- **Secrets** (API-Key, PulseAudio-Cookie) gehen über stdin in den Container,
-  nicht als Docker-Argument oder eingebundene Datei. Weil Soloist den Key nur
-  als Kommandozeilenargument annimmt, ist er während der Laufzeit in `ps` auf
-  der Box sichtbar, und zwar nur für root.
-- Das Weiterleiten des Tons per PulseAudio-Senke und RTP stammt aus dem
-  [Librespot-Addon von LibreELEC](https://github.com/LibreELEC/LibreELEC.tv/tree/master/packages/addons/service/librespot)
+- **Soloist is closed source** and therefore runs in a container: as a normal
+  user (uid 1000), with a read-only file system, without capabilities and
+  with `no-new-privileges`. It only gets the PulseAudio socket, its own volume
+  `soloist-data` and the host network, which Spotify Connect needs to be
+  discovered on the Wi-Fi. It cannot reach `/storage`, tokens of other
+  services or Docker.
+- **The binary is not included in the add-on**, because Spotify forbids
+  redistribution. The container downloads it from Spotify's CDN on every
+  start. Builds expire after 90 days (exit code 10); a restart is then enough.
+- **Secrets** (API key, PulseAudio cookie) are passed into the container via
+  stdin, not as a Docker argument or a mounted file. Because Soloist only
+  accepts the key as a command-line argument, it is visible in `ps` on the box
+  while running, and only to root.
+- Forwarding the audio via a PulseAudio sink and RTP comes from the
+  [librespot add-on by LibreELEC](https://github.com/LibreELEC/LibreELEC.tv/tree/master/packages/addons/service/librespot)
   (GPL-2.0-only).
 
-## Fehlersuche
+## Troubleshooting
 
-Die wichtigsten Ereignisse stehen in `kodi.log` mit dem Präfix
-`service.soloist:`. Jeden Befehl an Soloist und jedes Ereignis von Soloist
-sieht man erst mit eingeschaltetem Debug-Logging in Kodi.
+The most important events are in `kodi.log` with the prefix
+`service.soloist:`. Every command sent to Soloist and every event from Soloist
+only shows up with debug logging enabled in Kodi.
 
-## Entwicklung
+## Development
 
 ```
-python -m pytest -q     # Tests für die Teile ohne Kodi (WebSocket, Metadaten)
+python -m pytest -q     # tests for the parts that work without Kodi (WebSocket, metadata)
 ruff check .
 ./scripts/build-zip.sh  # dist/service.soloist-<version>.zip
+./scripts/build-repo.sh # repo/: Kodi repository with the current versions
 ```
 
-Kodi auf LibreELEC 12 bringt Python 3.11 mit, der Code muss dazu kompatibel
-bleiben. Icon, Fanart und Banner entstehen aus den SVG-Dateien in `assets/`.
+A release reaches the users of the repository once the version in
+`service.soloist/addon.xml` is bumped, `./scripts/build-repo.sh` has run and
+`repo/` is pushed to `main`.
 
-## Lizenz
+Kodi on LibreELEC 12 ships Python 3.11, and the code has to stay compatible
+with it. Icon, fanart and banner are generated from the SVG files in `assets/`.
 
-GPL-2.0-only, siehe [LICENSE](LICENSE).
+## License
+
+GPL-2.0-only, see [LICENSE](LICENSE).

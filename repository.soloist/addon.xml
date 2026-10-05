@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="repository.soloist" name="Soloist Repository" version="1.0.0" provider-name="willheisenberg">
+  <extension point="xbmc.addon.repository" name="Soloist Repository">
+    <dir>
+      <info compressed="false">https://raw.githubusercontent.com/willheisenberg/kodi-soloist/main/repo/addons.xml</info>
+      <checksum>https://raw.githubusercontent.com/willheisenberg/kodi-soloist/main/repo/addons.xml.md5</checksum>
+      <datadir zip="true">https://raw.githubusercontent.com/willheisenberg/kodi-soloist/main/repo/</datadir>
+    </dir>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Repository for the Soloist add-on</summary>
+    <summary lang="de_DE">Repository für das Soloist-Addon</summary>
+    <description lang="en_GB">Installs Soloist (Spotify Connect for Kodi) and keeps it up to date.</description>
+    <description lang="de_DE">Installiert Soloist (Spotify Connect für Kodi) und hält es aktuell.</description>
+    <platform>all</platform>
+    <license>GPL-2.0-only</license>
+    <assets>
+      <icon>icon.png</icon>
+    </assets>
+  </extension>
+</addon>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addons>
+<addon id="repository.soloist" name="Soloist Repository" version="1.0.0" provider-name="willheisenberg">
+  <extension point="xbmc.addon.repository" name="Soloist Repository">
+    <dir>
+      <info compressed="false">https://raw.githubusercontent.com/willheisenberg/kodi-soloist/main/repo/addons.xml</info>
+      <checksum>https://raw.githubusercontent.com/willheisenberg/kodi-soloist/main/repo/addons.xml.md5</checksum>
+      <datadir zip="true">https://raw.githubusercontent.com/willheisenberg/kodi-soloist/main/repo/</datadir>
+    </dir>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Repository for the Soloist add-on</summary>
+    <summary lang="de_DE">Repository für das Soloist-Addon</summary>
+    <description lang="en_GB">Installs Soloist (Spotify Connect for Kodi) and keeps it up to date.</description>
+    <description lang="de_DE">Installiert Soloist (Spotify Connect für Kodi) und hält es aktuell.</description>
+    <platform>all</platform>
+    <license>GPL-2.0-only</license>
+    <assets>
+      <icon>icon.png</icon>
+    </assets>
+  </extension>
+</addon>
+<addon id="service.soloist" name="Soloist" version="0.2.1" provider-name="willheisenberg">
+  <requires>
+    <import addon="xbmc.python" version="3.0.1"/>
+    <import addon="service.system.docker" version="12.0.0"/>
+  </requires>
+  <extension point="xbmc.service" library="default.py"/>
+  <extension point="xbmc.python.script" library="menu.py">
+    <provides>executable</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Spotify Connect for Kodi via Spotify Soloist</summary>
+    <summary lang="de_DE">Spotify Connect für Kodi über Spotify Soloist</summary>
+    <description lang="en_GB">Makes Kodi a Spotify Connect device using Spotify's official Soloist client. Soloist runs in an isolated Docker container; its audio and now-playing info appear in Kodi. Requires a Soloist API key from a Spotify Premium account.</description>
+    <description lang="de_DE">Macht Kodi zu einem Spotify-Connect-Gerät über Spotifys offiziellen Soloist-Client. Soloist läuft isoliert in einem Docker-Container; Ton und Titelinfos erscheinen in Kodi. Benötigt einen Soloist-API-Key von einem Spotify-Premium-Account.</description>
+    <disclaimer lang="en_GB">Spotify Soloist is proprietary software by Spotify and is downloaded from Spotify at runtime; it is not part of this add-on.</disclaimer>
+    <platform>linux</platform>
+    <license>GPL-2.0-only</license>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>
+</addons>
