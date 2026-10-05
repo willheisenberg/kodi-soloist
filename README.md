@@ -84,12 +84,11 @@ app under "Devices" as **Kodi**.
 ## Working together with the PartyQueue bot
 
 With [KodiMediaBot](https://github.com/willheisenberg/KodiMediaBot), the bot
-and Spotify can interrupt each other without anything getting lost:
+and Spotify simply replace each other:
 
-- **Spotify takes over:** the bot parks its queue or remembers the radio
-  station that is playing. The panel shows `Spotify: title – artist`.
-- **Spotify is gone or stays paused for 30 seconds:** the bot resumes the
-  interrupted video at the old position or restarts the station.
+- **Spotify takes over:** whatever the bot was playing stops. The panel shows
+  `Spotify: title – artist`.
+- **Spotify stops or pauses:** nothing happens on its own.
 - **Stop in the bot, or the bot plays something itself:** the box releases the
   Spotify device, and the app moves playback back to the phone. As long as
   another device is playing, the add-on leaves Kodi alone.

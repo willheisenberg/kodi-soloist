@@ -83,12 +83,11 @@ Spotify-App unter „Geräte“ als **Kodi**.
 ## Zusammenspiel mit dem PartyQueue-Bot
 
 Mit dem [KodiMediaBot](https://github.com/willheisenberg/KodiMediaBot) können
-sich Bot und Spotify gegenseitig unterbrechen, ohne dass etwas verloren geht:
+sich Bot und Spotify einfach gegenseitig ablösen:
 
-- **Spotify übernimmt:** Der Bot parkt seine Warteschlange bzw. merkt sich den
-  laufenden Radiosender. Das Panel zeigt `Spotify: Titel – Interpret`.
-- **Spotify ist weg oder bleibt 30 Sekunden pausiert:** Der Bot setzt das
-  unterbrochene Video an der alten Stelle fort bzw. startet den Sender neu.
+- **Spotify übernimmt:** Was der Bot gerade gespielt hat, stoppt. Das Panel
+  zeigt `Spotify: Titel – Interpret`.
+- **Spotify stoppt oder pausiert:** Es passiert nichts von selbst.
 - **Stopp im Bot, oder der Bot spielt selbst etwas ab:** Die Box gibt das
   Spotify-Gerät frei, und die App legt die Wiedergabe zurück aufs Handy.
   Solange ein anderes Gerät spielt, lässt das Addon Kodi in Ruhe.
