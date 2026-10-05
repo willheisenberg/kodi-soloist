@@ -27,6 +27,8 @@ class Player(xbmc.Player):
         self._status = "idle"
         self._ours = False
         self._starting = False
+        # A client asked for the device to be released and handles Kodi itself.
+        self._released = False
         # Kodi's pause/resume callbacks within this window echo our own call.
         self._own_action_until = 0.0
         # Set on shutdown. Player calls block on Kodi's main thread, which is
@@ -77,6 +79,7 @@ class Player(xbmc.Player):
         with self._lock:
             self._status = status
             if status in _ACTIVE:
+                self._released = False
                 if self._playing_ours():
                     if self._kodi_paused():
                         self._set_kodi_paused(False)
@@ -91,6 +94,11 @@ class Player(xbmc.Player):
                     # queue instead of restarting it.
                     xbmc.executebuiltin(f"NotifyAll({utils.ADDON_ID},soloist_takeover)", True)
                     self.play(self._url, self._item)
+            elif self._released:
+                # The client stops or replaces the stream itself. Checking
+                # for our stream and stopping it is not atomic: the stop could
+                # hit what the client has started in the meantime.
+                pass
             elif status == "paused":
                 if self._playing_ours():
                     self._set_kodi_paused(True)
@@ -114,6 +122,11 @@ class Player(xbmc.Player):
 
     def on_inactive(self):
         self.on_status("idle")
+
+    def on_release(self):
+        """A client gives the device back and takes care of Kodi's player."""
+        with self._lock:
+            self._released = True
 
     # --- Kodi -> Soloist ------------------------------------------------
 

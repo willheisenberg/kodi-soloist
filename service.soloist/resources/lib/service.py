@@ -2,6 +2,7 @@ import json
 import threading
 
 import container
+import device
 import player
 import pulseaudio
 import utils
@@ -28,6 +29,7 @@ class Session:
         self._monitor = monitor
         self._closed = threading.Event()
         self._ws = None
+        self._device = device.Device()
         self._failures = 0
         self._ws_port = int(utils.get_setting("ws_port"))
         self._sink = pulseaudio.RtpSink("soloist", int(utils.get_setting("rtp_port")))
@@ -109,6 +111,8 @@ class Session:
         kind = message.get("type")
         if kind not in ("position_sync", "queue_changed", "track_changed"):
             utils.debug(f"<- {kind} {message.get('status') or message.get('is_active') or ''}")
+        # Another device playing on the account is no playback of ours.
+        status = self._device.update(message)
         if kind == "auth_state":
             if message.get("logged_in"):
                 self._failures = 0
@@ -117,23 +121,23 @@ class Session:
                 self._player.on_inactive()
         elif kind == "playback_state":
             self._player.on_track(message.get("item"))
-            self._on_status(message.get("status", "idle"))
+            self._on_status(status)
             self._pin_volume(message.get("volume"))
         elif kind == "track_changed":
             self._player.on_track(message.get("item"))
         elif kind == "playback_changed":
-            self._on_status(message.get("status", "idle"))
+            self._on_status(status)
         elif kind == "volume_changed":
             self._pin_volume(message.get("volume"))
         elif kind == "device_changed":
-            if not message.get("is_active"):
-                self._on_status("idle")
+            self._on_status(status)
         elif kind == "error":
             utils.log(f"Soloist error: {message.get('message')}", xbmc.LOGWARNING)
 
     def release(self):
         """Give up the Spotify Connect device; the app moves back to the phone."""
         utils.log("release requested")
+        self._player.on_release()
         self.send("deactivate")
 
     def close(self):

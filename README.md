@@ -81,15 +81,16 @@ sich Bot und Spotify gegenseitig unterbrechen, ohne dass etwas verloren geht:
   laufenden Radiosender. Das Panel zeigt `Spotify: Titel – Interpret`.
 - **Spotify ist weg oder bleibt 30 Sekunden pausiert:** Der Bot setzt das
   unterbrochene Video an der alten Stelle fort bzw. startet den Sender neu.
-- **Stopp im Bot:** Die Box gibt das Spotify-Gerät frei, und die App legt die
-  Wiedergabe zurück aufs Handy.
+- **Stopp im Bot, oder der Bot spielt selbst etwas ab:** Die Box gibt das
+  Spotify-Gerät frei, und die App legt die Wiedergabe zurück aufs Handy.
+  Solange ein anderes Gerät spielt, lässt das Addon Kodi in Ruhe.
 
 Dafür schicken sich Addon und Bot Kodi-Benachrichtigungen:
 
 | Richtung | Meldung | Bedeutung |
 |---|---|---|
 | Addon → Clients | `Other.soloist_takeover` (sender `service.soloist`) | Spotify startet gleich, und zwar *bevor* Kodi den vorherigen Titel als gestoppt meldet |
-| Client → Addon | `JSONRPC.NotifyAll` mit `message: "soloist_release"` | Spotify-Gerät freigeben (`deactivate`) |
+| Client → Addon | `JSONRPC.NotifyAll` mit `message: "soloist_release"` | Spotify-Gerät freigeben (`deactivate`); den Spotify-Stream in Kodi stoppt oder ersetzt der Client selbst |
 
 ## Aufbau
 
