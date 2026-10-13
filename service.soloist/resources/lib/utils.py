@@ -8,6 +8,8 @@ ADDON_NAME = _ADDON.getAddonInfo("name")
 ADDON_PATH = _ADDON.getAddonInfo("path")
 ADDON_VERSION = _ADDON.getAddonInfo("version")
 _ADDON_ICON = _ADDON.getAddonInfo("icon")
+_HOME_WINDOW = 10000
+USER_PROPERTY = "soloist.user"
 
 _DEFAULTS = {
     "device_name": "Kodi",
@@ -40,6 +42,14 @@ def log(message, level=xbmc.LOGINFO):
 def debug(message):
     """Chatty per-event output; visible with Kodi's debug logging enabled."""
     log(message, xbmc.LOGDEBUG)
+
+
+def set_user(user):
+    """Publish the logged-in Spotify account to JSON-RPC clients (the bot).
+
+    They read it as the info label Window(Home).Property(soloist.user).
+    """
+    xbmcgui.Window(_HOME_WINDOW).setProperty(USER_PROPERTY, user)
 
 
 def notification(message, heading=ADDON_NAME, icon=_ADDON_ICON, time=5000):

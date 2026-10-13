@@ -12,6 +12,7 @@ import os
 import subprocess
 import threading
 
+import account
 import utils
 
 DOCKER = "/storage/.kodi/addons/service.system.docker/bin/docker"
@@ -128,7 +129,11 @@ class Container:
             # Soloist reports the playing track every 10 s.
             chatty = ": playing spotify:" in line
             (utils.debug if chatty else utils.log)(f"soloist: {line}")
+            user = account.parse(line)
+            if user is not None:
+                utils.set_user(user)
         returncode = self._process.wait()
+        utils.set_user("")
         utils.log(f"container exited with {returncode}")
         if not self._stopping:
             self._on_exit(returncode)

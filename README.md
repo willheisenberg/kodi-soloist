@@ -87,7 +87,7 @@ With [KodiMediaBot](https://github.com/willheisenberg/KodiMediaBot), the bot
 and Spotify simply replace each other:
 
 - **Spotify takes over:** whatever the bot was playing stops. The panel shows
-  `Spotify: title – artist`.
+  `Spotify (user): title – artist`.
 - **Spotify stops or pauses:** nothing happens on its own.
 - **Stop in the bot, or the bot plays something itself:** the box releases the
   Spotify device, and the app moves playback back to the phone. As long as
@@ -99,6 +99,11 @@ For this, the add-on and the bot send each other Kodi notifications:
 |---|---|---|
 | Add-on → clients | `Other.soloist_takeover` (sender `service.soloist`) | Spotify is about to start, sent *before* Kodi reports the previous item as stopped |
 | Client → add-on | `JSONRPC.NotifyAll` with `message: "soloist_release"` | Release the Spotify device (`deactivate`); the client stops or replaces the Spotify stream in Kodi itself |
+
+The add-on also publishes the Spotify account the box is logged in as, as the
+info label `Window(Home).Property(soloist.user)`. It is the account's
+username, which is a number for some accounts, and it is empty while nobody is
+logged in. Selecting the box in the Spotify app logs it in as that account.
 
 ## Architecture
 
