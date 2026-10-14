@@ -5,23 +5,34 @@ sink's monitor to 127.0.0.1 over RTP, and Kodi plays the RTP stream like any
 other audio file. Same approach as LibreELEC's Librespot add-on.
 """
 
+import json
 import socket
 import subprocess
 import threading
 
 import utils
+import xbmc
 
 _SAP_PORT = 9875
 
 
-def _pactl(*args):
+def _pactl(*args, quiet=False):
     result = subprocess.run(
         ["pactl", *args], stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
         encoding="utf-8", errors="replace", check=False,
     )
     output = result.stdout.strip()
-    utils.debug(f"pactl {' '.join(args)}: {output}")
+    if not quiet:
+        utils.debug(f"pactl {' '.join(args)}: {output}")
     return output if result.returncode == 0 else ""
+
+
+def _pactl_list(kind):
+    """`pactl list <kind>` as parsed JSON; empty if pactl fails."""
+    try:
+        return json.loads(_pactl("-f", "json", "list", kind, quiet=True) or "[]")
+    except ValueError:
+        return []
 
 
 def _unload_stale(sink):
@@ -102,6 +113,30 @@ class RtpSink:
             self.close()
             raise RuntimeError("could not set up the PulseAudio sink")
         self.suspend(True)
+
+    def ensure_routed(self):
+        """Move our streams back if PulseAudio moved them elsewhere.
+
+        module-switch-on-connect makes every new sink or source the default,
+        and PulseAudio moves streams to the default when their device goes
+        away. A sink loaded by another program once left the RTP stream on
+        that sink's monitor: Kodi got no packets and stopped playback.
+        """
+        rtp_module = self._modules[-1]
+        monitor = f"{self.sink}.monitor"
+        sources = {s["index"]: s["name"] for s in _pactl_list("sources")}
+        for output in _pactl_list("source-outputs"):
+            source = sources.get(output["source"], output["source"])
+            if output.get("owner_module") == rtp_module and source != monitor:
+                utils.log(f"RTP stream was moved to {source}, moving it back", xbmc.LOGWARNING)
+                _pactl("move-source-output", str(output["index"]), monitor)
+        sinks = {s["index"]: s["name"] for s in _pactl_list("sinks")}
+        for stream in _pactl_list("sink-inputs"):
+            sink = sinks.get(stream["sink"], stream["sink"])
+            ours = stream.get("properties", {}).get("application.process.binary") == "soloist"
+            if ours and sink != self.sink:
+                utils.log(f"Spotify stream was moved to {sink}, moving it back", xbmc.LOGWARNING)
+                _pactl("move-sink-input", str(stream["index"]), self.sink)
 
     def suspend(self, suspended):
         _pactl("suspend-sink", self.sink, "1" if suspended else "0")

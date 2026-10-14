@@ -12,6 +12,8 @@ import xbmc
 _MAX_FAILURES = 5
 # JSONRPC.NotifyAll from the PartyQueue bot when it stops playback.
 _RELEASE_NOTIFICATION = "Other.soloist_release"
+# How often to check, while Spotify plays, that PulseAudio left our streams alone.
+_ROUTING_CHECK_SECONDS = 5
 
 
 class _NotConfigured(Exception):
@@ -31,6 +33,7 @@ class Session:
         self._ws = None
         self._device = device.Device()
         self._failures = 0
+        self._playing = False
         self._ws_port = int(utils.get_setting("ws_port"))
         self._sink = pulseaudio.RtpSink("soloist", int(utils.get_setting("rtp_port")))
         try:
@@ -87,6 +90,7 @@ class Session:
                 utils.log(f"WebSocket ended: {e}")
             finally:
                 self._ws = None
+                self._playing = False
                 ws.close()
                 self._player.on_inactive()
                 self._sink.suspend(True)
@@ -105,7 +109,20 @@ class Session:
 
     def _on_status(self, status):
         self._sink.suspend(status == "idle")
+        playing = status == "playing"
+        if playing and not self._playing:
+            self.check_routing(force=True)
+        self._playing = playing
         self._player.on_status(status)
+
+    def check_routing(self, force=False):
+        """Repair our PulseAudio streams; does nothing unless Spotify plays."""
+        if not (force or self._playing) or self._closed.is_set():
+            return
+        try:
+            self._sink.ensure_routed()
+        except Exception as e:  # noqa: BLE001 - a failed check must not stop the service
+            utils.log(f"routing check failed: {e}", xbmc.LOGWARNING)
 
     def _dispatch(self, message):
         kind = message.get("type")
@@ -178,9 +195,13 @@ class Monitor(xbmc.Monitor):
             except Exception as e:  # noqa: BLE001 - keep the service alive, retry on settings change
                 utils.log(f"start failed: {e}", xbmc.LOGERROR)
                 utils.notification(utils.string(30204), time=10000)
+            seconds = 0
             while not self._settings_changed.is_set():
                 if self.waitForAbort(1):
                     break
+                seconds += 1
+                if session and seconds % _ROUTING_CHECK_SECONDS == 0:
+                    session.check_routing()
             self._session = None
             if session:
                 session.close()
