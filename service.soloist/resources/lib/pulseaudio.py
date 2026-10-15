@@ -1,8 +1,9 @@
 """Route Soloist's audio into Kodi.
 
 Soloist plays into a PulseAudio null sink; module-rtp-send streams that
-sink's monitor to 127.0.0.1 over RTP, and Kodi plays the RTP stream like any
-other audio file. Same approach as LibreELEC's Librespot add-on.
+sink's monitor to 127.0.0.1 over RTP, and Kodi plays the RTP stream through
+an SDP file describing it. Similar to LibreELEC's Librespot add-on, which
+streams 44.1 kHz and needs no SDP file.
 """
 
 import json
@@ -14,6 +15,11 @@ import utils
 import xbmc
 
 _SAP_PORT = 9875
+# 48 kHz, not 44.1 kHz: after the AV receiver is switched on, 44.1 kHz over
+# HDMI can play too high and crackle until something opens it with 48 kHz.
+_RATE = 48000
+_CHANNELS = 2
+_PAYLOAD_TYPE = 127
 
 
 def _pactl(*args, quiet=False):
@@ -89,14 +95,37 @@ class _SapSink:
             self._sock.close()
 
 
+def sdp(address, port):
+    """Describe the RTP stream for Kodi.
+
+    Only 44.1 kHz has a static RTP payload type that Kodi plays without a
+    description; module-rtp-send marks every other format as type 127.
+    """
+    return (
+        "v=0\r\n"
+        f"o=- 0 0 IN IP4 {address}\r\n"
+        "s=Soloist\r\n"
+        f"c=IN IP4 {address}\r\n"
+        "t=0 0\r\n"
+        f"m=audio {port} RTP/AVP {_PAYLOAD_TYPE}\r\n"
+        f"a=rtpmap:{_PAYLOAD_TYPE} L16/{_RATE}/{_CHANNELS}\r\n"
+    )
+
+
 class RtpSink:
-    def __init__(self, sink, port, address="127.0.0.1"):
+    def __init__(self, sink, port, sdp_path, address="127.0.0.1"):
         self.sink = sink
-        self.url = f"rtp://{address}:{port}"
+        # Kodi plays the stream through this description file.
+        self.url = sdp_path
+        with open(sdp_path, "w", encoding="utf-8") as f:
+            f.write(sdp(address, port))
         self._sap = _SapSink(address)
         self._modules = []
         _unload_stale(sink)
-        null_sink = _pactl("load-module", "module-null-sink", f"sink_name={sink}")
+        null_sink = _pactl(
+            "load-module", "module-null-sink", f"sink_name={sink}",
+            f"rate={_RATE}", f"channels={_CHANNELS}",
+        )
         if null_sink:
             self._modules.append(null_sink)
         rtp = _pactl(
@@ -105,6 +134,9 @@ class RtpSink:
             f"source={sink}.monitor",
             f"destination_ip={address}",
             f"port={port}",
+            "format=s16be",
+            f"rate={_RATE}",
+            f"channels={_CHANNELS}",
             "inhibit_auto_suspend=always",
         )
         if rtp:

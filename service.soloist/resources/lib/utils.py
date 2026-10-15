@@ -7,6 +7,7 @@ ADDON_ID = _ADDON.getAddonInfo("id")
 ADDON_NAME = _ADDON.getAddonInfo("name")
 ADDON_PATH = _ADDON.getAddonInfo("path")
 ADDON_VERSION = _ADDON.getAddonInfo("version")
+ADDON_PROFILE = _ADDON.getAddonInfo("profile")
 _ADDON_ICON = _ADDON.getAddonInfo("icon")
 _HOME_WINDOW = 10000
 USER_PROPERTY = "soloist.user"

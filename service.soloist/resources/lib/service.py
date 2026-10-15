@@ -1,4 +1,5 @@
 import json
+import os
 import threading
 
 import container
@@ -8,6 +9,7 @@ import pulseaudio
 import utils
 import wsclient
 import xbmc
+import xbmcvfs
 
 _MAX_FAILURES = 5
 # JSONRPC.NotifyAll from the PartyQueue bot when it stops playback.
@@ -35,7 +37,11 @@ class Session:
         self._failures = 0
         self._playing = False
         self._ws_port = int(utils.get_setting("ws_port"))
-        self._sink = pulseaudio.RtpSink("soloist", int(utils.get_setting("rtp_port")))
+        profile = xbmcvfs.translatePath(utils.ADDON_PROFILE)
+        os.makedirs(profile, exist_ok=True)
+        self._sink = pulseaudio.RtpSink(
+            "soloist", int(utils.get_setting("rtp_port")), os.path.join(profile, "soloist.sdp"),
+        )
         try:
             self._player = player.Player(self._sink.url, self.send)
             self._container = container.Container(self._on_container_exit)

@@ -111,10 +111,15 @@ logged in. Selecting the box in the Spotify app logs it in as that account.
 Spotify app ──Connect──▶ Soloist (Docker container, isolated)
                             │ PulseAudio (sink "soloist")
                             ▼
-                   module-rtp-send ──▶ rtp://127.0.0.1:23433 ──▶ Kodi player
-                            ▲
+                   module-rtp-send ──▶ RTP 127.0.0.1:23433 (48 kHz) ──▶ Kodi player
+                            ▲                         (via soloist.sdp)
    Kodi add-on ◀──WebSocket 127.0.0.1:24879── title, cover, status
 ```
+
+- **48 kHz, described by an SDP file.** Kodi plays the RTP stream through
+  `addon_data/service.soloist/soloist.sdp`, which the add-on writes on start.
+  Without such a file Kodi only plays RTP at 44.1 kHz, and 44.1 kHz over HDMI
+  can sound too high and crackle after an AV receiver is switched on.
 
 - **Soloist is closed source** and therefore runs in a container: as a normal
   user (uid 1000), with a read-only file system, without capabilities and

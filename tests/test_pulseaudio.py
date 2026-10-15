@@ -91,6 +91,38 @@ def test_foreign_rtp_stream_is_left_alone(monkeypatch):
     assert pactl.moves == []
 
 
+class _NoSap:
+    def __init__(self, address):
+        pass
+
+    def close(self):
+        pass
+
+
+def test_sink_streams_48khz_described_by_sdp_file(monkeypatch, tmp_path):
+    loaded = []
+
+    def pactl(*args, quiet=False):
+        if args[0] == "load-module":
+            loaded.append(args)
+            return str(len(loaded))
+        return ""
+
+    monkeypatch.setattr(pulseaudio, "_pactl", pactl)
+    monkeypatch.setattr(pulseaudio, "_SapSink", _NoSap)
+    sdp_path = tmp_path / "soloist.sdp"
+    sink = pulseaudio.RtpSink("soloist", 23433, str(sdp_path))
+
+    assert sink.url == str(sdp_path)
+    null_sink, rtp = loaded
+    assert "rate=48000" in null_sink and "channels=2" in null_sink
+    assert {"format=s16be", "rate=48000", "channels=2", "port=23433"} <= set(rtp)
+    sdp = sdp_path.read_bytes().decode()
+    assert "m=audio 23433 RTP/AVP 127\r\n" in sdp
+    assert "a=rtpmap:127 L16/48000/2\r\n" in sdp
+    assert "c=IN IP4 127.0.0.1\r\n" in sdp
+
+
 def test_pactl_failure_moves_nothing(monkeypatch):
     sink, pactl = _sink(monkeypatch, [], [])
     monkeypatch.setattr(pulseaudio, "_pactl", lambda *args, quiet=False: "")

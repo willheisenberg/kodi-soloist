@@ -105,10 +105,16 @@ Dafür schicken sich Addon und Bot Kodi-Benachrichtigungen:
 Spotify-App ──Connect──▶ Soloist (Docker-Container, isoliert)
                             │ PulseAudio (Senke "soloist")
                             ▼
-                   module-rtp-send ──▶ rtp://127.0.0.1:23433 ──▶ Kodi-Player
-                            ▲
+                   module-rtp-send ──▶ RTP 127.0.0.1:23433 (48 kHz) ──▶ Kodi-Player
+                            ▲                         (über soloist.sdp)
    Kodi-Addon ◀──WebSocket 127.0.0.1:24879── Titel, Cover, Status
 ```
+
+- **48 kHz, beschrieben durch eine SDP-Datei.** Kodi spielt den RTP-Stream
+  über `addon_data/service.soloist/soloist.sdp` ab, die das Addon beim Start
+  schreibt. Ohne eine solche Datei spielt Kodi RTP nur mit 44,1 kHz, und
+  44,1 kHz über HDMI kann nach dem Einschalten eines AV-Receivers zu hoch
+  klingen und knistern.
 
 - **Soloist ist closed source** und läuft deshalb in einem Container: als
   normaler Benutzer (uid 1000), mit schreibgeschütztem Dateisystem, ohne

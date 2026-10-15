@@ -34,8 +34,9 @@ class Player(xbmc.Player):
         # Set on shutdown. Player calls block on Kodi's main thread, which is
         # itself waiting for the add-on to stop then: no more calls after it.
         self._closing = threading.Event()
+        # No "inputstream": "inputstream.ffmpeg" here: it lets ffmpeg open the
+        # SDP file itself, with a protocol whitelist that refuses its rtp://.
         self._item = xbmcgui.ListItem(path=url)
-        self._item.setProperties({"inputstream": "inputstream.ffmpeg"})
         self._tag = self._item.getMusicInfoTag()
 
     # --- state helpers --------------------------------------------------
